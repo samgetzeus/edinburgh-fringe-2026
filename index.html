@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Edinburgh Fringe 2026 — The Trailer</title>
+<style>
+  :root{
+    --magenta:#e0218a;
+    --purple:#9b30ff;
+    --gold:#ffcf6b;
+    --ink:#05030a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;background:#000;overflow:hidden;font-family:"Helvetica Neue",Arial,sans-serif;}
+
+  /* ---------- Stage ---------- */
+  #stage{position:fixed;inset:0;background:#000;cursor:default;}
+  .scene{
+    position:absolute;inset:0;opacity:0;
+    transition:opacity 900ms ease;
+    display:flex;align-items:center;justify-content:center;
+    text-align:center;padding:6vw;
+  }
+  .scene.active{opacity:1;}
+
+  .bg{position:absolute;inset:0;background-size:cover;background-position:center;
+      transform:scale(1.12);opacity:.62;will-change:transform;}
+  .scene.active .bg{animation:kenburns 7s ease-out forwards;}
+  @keyframes kenburns{from{transform:scale(1.18)}to{transform:scale(1.0)}}
+
+  /* dark wash + vignette so text always reads */
+  .wash{position:absolute;inset:0;background:
+      radial-gradient(120% 90% at 50% 50%,transparent 30%,rgba(0,0,0,.78) 100%),
+      linear-gradient(180deg,rgba(5,3,10,.55),rgba(5,3,10,.35) 40%,rgba(5,3,10,.78));}
+
+  /* cinematic letterbox bars */
+  .bar{position:fixed;left:0;right:0;height:8vh;background:#000;z-index:40;}
+  .bar.top{top:0;} .bar.bottom{bottom:0;}
+
+  /* film grain */
+  #grain{position:fixed;inset:-50%;z-index:30;pointer-events:none;opacity:.05;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    animation:grain 600ms steps(2) infinite;}
+  @keyframes grain{0%{transform:translate(0,0)}50%{transform:translate(-4%,3%)}100%{transform:translate(3%,-2%)}}
+
+  /* ---------- Text ---------- */
+  .inner{position:relative;z-index:20;max-width:1100px;}
+  .kicker{
+    font-size:clamp(.7rem,1.8vw,1.05rem);letter-spacing:.55em;text-transform:uppercase;
+    color:var(--gold);font-weight:700;margin-bottom:1.1rem;
+    opacity:0;transform:translateY(14px);
+  }
+  .headline{
+    font-size:clamp(2.1rem,7.2vw,6rem);line-height:.98;font-weight:800;color:#fff;
+    text-transform:uppercase;letter-spacing:-.01em;text-shadow:0 6px 40px rgba(0,0,0,.6);
+    opacity:0;transform:translateY(26px);
+  }
+  .headline .pink{color:var(--magenta);}
+  .headline .vlt{background:linear-gradient(90deg,var(--magenta),var(--purple),var(--gold));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .sub{font-size:clamp(1rem,2.4vw,1.6rem);color:#e7e2f0;margin-top:1.4rem;font-weight:300;
+    opacity:0;transform:translateY(18px);}
+
+  .scene.active .kicker{animation:rise 800ms ease forwards;}
+  .scene.active .headline{animation:rise 900ms 120ms ease forwards;}
+  .scene.active .sub{animation:rise 900ms 360ms ease forwards;}
+  @keyframes rise{to{opacity:1;transform:translateY(0)}}
+
+  /* lineup list */
+  .lineup{display:flex;flex-wrap:wrap;gap:.6rem 1.4rem;justify-content:center;margin-top:1.8rem;}
+  .lineup span{font-size:clamp(1rem,2.6vw,1.9rem);font-weight:700;color:#fff;opacity:0;
+    transform:translateY(16px);text-shadow:0 2px 18px rgba(0,0,0,.7);}
+  .lineup span b{color:var(--magenta);font-weight:800;}
+  .scene.active .lineup span{animation:rise 700ms ease forwards;}
+  .scene.active .lineup span:nth-child(1){animation-delay:.25s}
+  .scene.active .lineup span:nth-child(2){animation-delay:.45s}
+  .scene.active .lineup span:nth-child(3){animation-delay:.65s}
+  .scene.active .lineup span:nth-child(4){animation-delay:.85s}
+  .scene.active .lineup span:nth-child(5){animation-delay:1.05s}
+  .scene.active .lineup span:nth-child(6){animation-delay:1.25s}
+  .scene.active .lineup span:nth-child(7){animation-delay:1.45s}
+  .scene.active .lineup span:nth-child(8){animation-delay:1.65s}
+
+  /* big title scene */
+  .titlecard .fringe{font-size:clamp(2.6rem,11vw,9rem);font-weight:800;line-height:.9;
+    background:linear-gradient(90deg,var(--magenta),var(--purple) 55%,var(--gold));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    text-transform:uppercase;letter-spacing:-.02em;}
+  .dates{display:inline-block;margin-top:1.6rem;padding:.55em 1.1em;border:2px solid var(--gold);
+    border-radius:100px;color:var(--gold);font-weight:800;letter-spacing:.18em;
+    font-size:clamp(1rem,3.2vw,2rem);text-transform:uppercase;}
+
+  /* options scene */
+  .options{display:flex;gap:clamp(1rem,3vw,2.5rem);justify-content:center;flex-wrap:wrap;margin-top:2rem;}
+  .opt{flex:1 1 280px;max-width:380px;background:rgba(12,8,22,.66);border:1px solid rgba(255,255,255,.16);
+    backdrop-filter:blur(6px);border-radius:20px;padding:2rem 1.6rem;opacity:0;transform:translateY(26px);}
+  .scene.active .opt{animation:rise 800ms ease forwards;}
+  .scene.active .opt:nth-child(2){animation-delay:.25s;}
+  .opt .num{font-size:.8rem;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);font-weight:700;}
+  .opt h3{font-size:clamp(1.5rem,4.5vw,2.4rem);color:#fff;margin:.5rem 0 .4rem;text-transform:uppercase;font-weight:800;}
+  .opt .price{font-size:clamp(1.1rem,3vw,1.6rem);font-weight:800;}
+  .opt.book .price{color:var(--magenta);}
+  .opt.camp .price{color:#5fe39a;}
+  .opt p{color:#cfc8db;margin-top:.7rem;font-weight:300;font-size:clamp(.9rem,2vw,1.05rem);}
+
+  /* progress + controls */
+  #progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:60;
+    background:linear-gradient(90deg,var(--magenta),var(--gold));transition:width .25s linear;}
+  #controls{position:fixed;bottom:calc(8vh + 14px);left:50%;transform:translateX(-50%);
+    z-index:60;display:flex;gap:10px;opacity:0;transition:opacity .3s;}
+  #stage:hover #controls{opacity:1;}
+  .btn{background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.25);color:#fff;
+    padding:.55rem 1rem;border-radius:100px;font-size:.85rem;cursor:pointer;backdrop-filter:blur(6px);
+    font-weight:600;letter-spacing:.04em;}
+  .btn:hover{background:var(--magenta);border-color:var(--magenta);}
+
+  /* start overlay (needed for clean first play / recording) */
+  #intro{position:fixed;inset:0;z-index:80;background:radial-gradient(circle at 50% 40%,#1a0b2e,#05030a);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:1.6rem;padding:8vw;}
+  #intro .introtag{font-size:clamp(.8rem,2.4vw,1.2rem);letter-spacing:.4em;text-transform:uppercase;
+    color:var(--gold);font-weight:700;}
+  #intro h1{font-size:clamp(1.8rem,6vw,4rem);font-weight:800;text-transform:uppercase;line-height:1;
+    background:linear-gradient(90deg,var(--magenta),var(--purple),var(--gold));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  #intro p{color:#b9b1cc;max-width:520px;font-weight:300;font-size:clamp(.95rem,2.4vw,1.15rem);}
+  #playBtn{background:var(--magenta);color:#fff;border:none;padding:1rem 2.4rem;border-radius:100px;
+    font-size:1.05rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;
+    box-shadow:0 10px 40px rgba(224,33,138,.45);}
+  #playBtn:hover{transform:scale(1.04);}
+  .hidden{opacity:0!important;pointer-events:none!important;}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="bar top"></div>
+  <div class="bar bottom"></div>
+  <div id="grain"></div>
+  <div id="progress"></div>
+
+  <!-- Scenes are injected by JS -->
+
+  <div id="controls">
+    <button class="btn" id="replay">↻ Replay</button>
+    <button class="btn" id="mute">♪ Music: On</button>
+    <button class="btn" id="full">⛶ Fullscreen</button>
+  </div>
+
+  <div id="intro">
+    <div class="introtag">Sam invites you to&hellip;</div>
+    <h1>Edinburgh Fringe 2026<br>The Trailer</h1>
+    <p>A 60-second hype reel for the crew. Turn your sound on, hit play, and go full-screen. (Tip: screen-record this to share as a video.)</p>
+    <button id="playBtn">▶ Play trailer (with sound)</button>
+  </div>
+</div>
+
+<script>
+const A = "assets/";
+const scenes = [
+  { bg:null, kicker:"Sam invites you to&hellip;", headline:'an <span class="pink">epic</span> weekend<br>in the north', dur:3400 },
+  { bg:A+"fringe-broll-edinburgh.png", kicker:"One city. Three weeks of madness.", headline:'The world&rsquo;s <span class="vlt">biggest</span> arts festival', dur:3600 },
+  { bg:A+"fringe-broll-crowd.png", kicker:"Edinburgh Festival Fringe", headline:'3,500+ shows<br>One unforgettable weekend', dur:3600 },
+  { bg:A+"fringe-broll-standup.png", kicker:"World-class stand-up", headline:'Comedy&rsquo;s biggest names', lineup:[
+      "Connor <b>Burns</b>","Daniel <b>Sloss</b>","Jack <b>Dee</b>","Russell <b>Howard</b>",
+      "Sara <b>Pascoe</b>","Ed <b>Gamble</b>","Joe <b>Lycett</b>","Rosie <b>Jones</b>"], dur:5200 },
+  { bg:A+"fringe-broll-circus.png", kicker:"Circus &amp; cabaret", headline:'Jaw-dropping<br><span class="pink">spectacle</span>', dur:3400 },
+  { bg:A+"fringe-broll-street.png", kicker:"Fire. Magic. Pure chaos.", headline:'And it&rsquo;s all<br>on the street', dur:3400 },
+  { bg:A+"fringe-broll-crowd.png", kicker:"This year, we&rsquo;re going", headline:'Get the <span class="vlt">crew</span><br>together', dur:3200 },
+  { titlecard:true, dur:4200 },
+  { options:true, dur:5600 },
+  { bg:null, kicker:"So&hellip;", headline:'Are you <span class="pink">in</span>?', sub:'Reply with a 👍 and I&rsquo;ll lock it in.', dur:4200 }
+];
+
+const stage = document.getElementById('stage');
+const progress = document.getElementById('progress');
+let nodes = [];
+
+function buildScene(s){
+  const el = document.createElement('div');
+  el.className = 'scene';
+  let bg = s.bg ? `<div class="bg" style="background-image:url('${s.bg}')"></div>` : '';
+  let body = '';
+  if(s.titlecard){
+    el.classList.add('titlecard');
+    body = `<div class="inner">
+        <div class="kicker">Sam invites you to</div>
+        <div class="fringe">Edinburgh<br>Fringe</div>
+        <div class="dates">Fri 14 &ndash; Sun 16 August 2026</div>
+      </div>`;
+  } else if(s.options){
+    body = `<div class="inner">
+        <div class="kicker">Two ways to do it</div>
+        <div class="headline" style="font-size:clamp(1.6rem,5vw,3.4rem)">Pick your vibe</div>
+        <div class="options">
+          <div class="opt book">
+            <div class="num">Option 01</div>
+            <h3>Book a flat</h3>
+            <div class="price">A few hundred £ each</div>
+            <p>Big shared flat, proper beds, walk to every venue. Split between the group.</p>
+          </div>
+          <div class="opt camp">
+            <div class="num">Option 02</div>
+            <h3>Camp</h3>
+            <div class="price">Free</div>
+            <p>Tents, city skyline, campfire energy. Zero cost, maximum legend status.</p>
+          </div>
+        </div>
+      </div>`;
+  } else {
+    body = `<div class="inner">
+        ${s.kicker?`<div class="kicker">${s.kicker}</div>`:''}
+        ${s.headline?`<div class="headline">${s.headline}</div>`:''}
+        ${s.lineup?`<div class="lineup">${s.lineup.map(n=>`<span>${n}</span>`).join('')}</div>`:''}
+        ${s.sub?`<div class="sub">${s.sub}</div>`:''}
+      </div>`;
+  }
+  el.innerHTML = bg + '<div class="wash"></div>' + body;
+  stage.insertBefore(el, document.getElementById('controls'));
+  return el;
+}
+
+scenes.forEach(s => nodes.push(buildScene(s)));
+
+let idx = -1, timer = null, total = scenes.reduce((a,s)=>a+s.dur,0), elapsed = 0;
+
+function show(i){
+  nodes.forEach(n=>n.classList.remove('active'));
+  if(i>=scenes.length){ finish(); return; }
+  idx = i;
+  // retrigger animations by forcing reflow
+  const node = nodes[i];
+  node.classList.remove('active'); void node.offsetWidth; node.classList.add('active');
+  timer = setTimeout(()=>show(i+1), scenes[i].dur);
+}
+
+function finish(){
+  nodes[nodes.length-1].classList.add('active'); // hold last frame
+  progress.style.width = '100%';
+}
+
+// progress bar tick
+let progTimer = null;
+function runProgress(){
+  elapsed = 0;
+  clearInterval(progTimer);
+  progTimer = setInterval(()=>{
+    elapsed += 100;
+    progress.style.width = Math.min(100,(elapsed/total)*100)+'%';
+    if(elapsed>=total) clearInterval(progTimer);
+  },100);
+}
+
+function start(){
+  clearTimeout(timer);
+  runProgress();
+  show(0);
+}
+
+document.getElementById('playBtn').addEventListener('click', ()=>{
+  document.getElementById('intro').classList.add('hidden');
+  startMusic();
+  start();
+});
+document.getElementById('replay').addEventListener('click', start);
+document.getElementById('full').addEventListener('click', ()=>{
+  if(!document.fullscreenElement){ stage.requestFullscreen?.(); }
+  else{ document.exitFullscreen?.(); }
+});
+
+/* ---------- Original Celtic / bagpipe-style music (Web Audio, no copyright) ---------- */
+let actx=null, master=null, musicOn=true, schedTimer=null, droneNodes=[];
+const muteBtn=document.getElementById('mute');
+
+// A Mixolydian gives the Scottish folk flavour. Frequencies (Hz).
+const N={A3:220,B3:246.94,Cs4:277.18,D4:293.66,E4:329.63,Fs4:369.99,G4:392.00,A4:440,B4:493.88,Cs5:554.37,D5:587.33};
+// A jaunty reel-style phrase: [freq, beats]
+const MEL=[
+  [N.A4,1],[N.E4,1],[N.Fs4,1],[N.G4,1],[N.A4,1],[N.B4,1],[N.Cs5,1],[N.A4,1],
+  [N.B4,1],[N.G4,1],[N.A4,1],[N.Fs4,1],[N.E4,2],[N.D4,1],[N.Cs4,1],
+  [N.D4,1],[N.E4,1],[N.Fs4,1],[N.G4,1],[N.A4,1],[N.Fs4,1],[N.E4,1],[N.D4,1],
+  [N.Cs4,1],[N.B3,1],[N.A3,1],[N.B3,1],[N.Cs4,2],[N.E4,1],[N.A4,1]
+];
+const BPM=144, BEAT=60/BPM/2; // eighth-note pulse
+
+function reed(freq,t,dur,gain){
+  const o=actx.createOscillator(), o2=actx.createOscillator(), g=actx.createGain(), lp=actx.createBiquadFilter();
+  o.type='sawtooth'; o2.type='square'; o.frequency.value=freq; o2.frequency.value=freq*1.005;
+  lp.type='lowpass'; lp.frequency.value=2400; lp.Q.value=1;
+  // light vibrato for a piping feel
+  const vib=actx.createOscillator(), vg=actx.createGain();
+  vib.frequency.value=5.5; vg.gain.value=freq*0.006; vib.connect(vg); vg.connect(o.frequency); vg.connect(o2.frequency);
+  g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(gain,t+0.02);
+  g.gain.setValueAtTime(gain,t+dur*0.7);
+  g.gain.exponentialRampToValueAtTime(0.0008,t+dur);
+  o.connect(lp); o2.connect(lp); lp.connect(g); g.connect(master);
+  o.start(t); o2.start(t); vib.start(t);
+  o.stop(t+dur+0.05); o2.stop(t+dur+0.05); vib.stop(t+dur+0.05);
+}
+function bodhran(t,accent){
+  const o=actx.createOscillator(), g=actx.createGain();
+  o.type='sine'; o.frequency.setValueAtTime(accent?150:110,t);
+  o.frequency.exponentialRampToValueAtTime(55,t+0.12);
+  g.gain.setValueAtTime(accent?0.5:0.28,t);
+  g.gain.exponentialRampToValueAtTime(0.001,t+0.18);
+  o.connect(g); g.connect(master); o.start(t); o.stop(t+0.2);
+}
+function startDrones(){
+  [110,164.81].forEach(f=>{ // A2 + E3 bagpipe-style drones
+    const o=actx.createOscillator(), g=actx.createGain(), lp=actx.createBiquadFilter();
+    o.type='sawtooth'; o.frequency.value=f; lp.type='lowpass'; lp.frequency.value=900;
+    g.gain.value=0.05; o.connect(lp); lp.connect(g); g.connect(master); o.start();
+    droneNodes.push(o);
+  });
+}
+function startMusic(){
+  if(actx) return;
+  actx=new (window.AudioContext||window.webkitAudioContext)();
+  master=actx.createGain(); master.gain.value=musicOn?0.85:0; master.connect(actx.destination);
+  startDrones();
+  let next=actx.currentTime+0.15, i=0, beatCount=0;
+  schedTimer=setInterval(()=>{
+    while(next < actx.currentTime+0.3){
+      const [f,b]=MEL[i%MEL.length];
+      reed(f,next,BEAT*b*0.95,0.16);
+      for(let k=0;k<b;k++){ bodhran(next+k*BEAT, (beatCount+k)%4===0); }
+      next+=BEAT*b; beatCount+=b; i++;
+    }
+  },60);
+}
+muteBtn.addEventListener('click',()=>{
+  musicOn=!musicOn;
+  if(master) master.gain.setTargetAtTime(musicOn?0.85:0, actx.currentTime, 0.05);
+  muteBtn.textContent = musicOn? '♪ Music: On' : '♪ Music: Off';
+});
+</script>
+</body>
+</html>
